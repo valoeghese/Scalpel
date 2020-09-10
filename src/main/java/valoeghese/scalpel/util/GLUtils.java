@@ -1,6 +1,6 @@
 package valoeghese.scalpel.util;
 
-import tk.valoeghese.fc0.client.render.system.Window;
+import valoeghese.scalpel.Window;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL.createCapabilities;
