@@ -21,7 +21,6 @@ public abstract class ScalpelApp implements Runnable {
 		this.preInit();
 
 		Thread t = new Thread(this::init);
-		t.setDaemon(true);
 		t.start();
 
 		while (t.isAlive()) {
