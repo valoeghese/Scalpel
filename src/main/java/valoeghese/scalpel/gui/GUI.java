@@ -50,6 +50,8 @@ public abstract class GUI implements PseudoGUI {
 	@Override
 	public void destroy() {
 		for (GUI.VertexArray array : this.vertexArrays) {
+			glDeleteBuffers(array.vbo);
+			glDeleteBuffers(array.ebo);
 			glDeleteVertexArrays(array.vao);
 		}
 
@@ -81,7 +83,7 @@ public abstract class GUI implements PseudoGUI {
 		glEnableVertexAttribArray(1);
 		glBindVertexArray(0);
 
-		this.vertexArrays.add(new VertexArray(vao, indices.length));
+		this.vertexArrays.add(new VertexArray(vbo, ebo, vao, indices.length));
 	}
 
 	@Override
@@ -102,12 +104,16 @@ public abstract class GUI implements PseudoGUI {
 	}
 
 	protected static class VertexArray {
-		private VertexArray(int vao, int elementCount) {
+		private VertexArray(int vbo, int ebo, int vao, int elementCount) {
+			this.vbo = vbo;
+			this.ebo = ebo;
 			this.vao = vao;
 			this.elementCount = elementCount;
 		}
 
 		private final int vao;
+		private final int vbo;
+		private final int ebo;
 		private final int elementCount;
 
 		@Override

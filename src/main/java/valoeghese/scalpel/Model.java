@@ -76,7 +76,7 @@ public abstract class Model {
 		glEnableVertexAttribArray(2);
 		glBindVertexArray(0);
 
-		this.vertexArrays.add(new VertexArray(vao, indices.length));
+		this.vertexArrays.add(new VertexArray(vbo, ebo, vao, indices.length));
 	}
 
 	public void destroy() {
@@ -111,11 +111,15 @@ public abstract class Model {
 	}
 
 	private static class VertexArray {
-		private VertexArray(int vao, int elementCount) {
+		private VertexArray(int vbo, int ebo, int vao, int elementCount) {
+			this.vbo = vbo;
+			this.ebo = ebo;
 			this.vao = vao;
 			this.elementCount = elementCount;
 		}
 
+		private final int vbo;
+		private final int ebo;
 		private final int vao;
 		private final int elementCount;
 	}

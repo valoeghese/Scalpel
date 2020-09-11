@@ -2,6 +2,7 @@ package valoeghese.scalpel.test;
 
 import valoeghese.scalpel.Model;
 import valoeghese.scalpel.Shader;
+import valoeghese.scalpel.gui.GUI;
 import valoeghese.scalpel.util.ResourceLoader;
 import valoeghese.scalpel.util.TextureLoader;
 
@@ -9,9 +10,9 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public class TestPlaneModel extends Model {
-	public TestPlaneModel(int mode, Shader shader) {
-		super(mode, shader);
+public class TestPlaneGUI extends GUI {
+	public TestPlaneGUI(int mode) {
+		super(mode);
 		this.vertex(-0.5f, 0.5f, -0.5f, 0.0f, 1.0f); // tl
 		this.vertex(-0.5f, -0.5f, -0.5f, 0.0f, 0.0f); // bl
 		this.vertex(0.5f, 0.5f, -0.5f, 1.0f, 1.0f); // tr

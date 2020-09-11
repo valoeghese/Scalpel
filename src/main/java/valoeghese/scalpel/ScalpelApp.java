@@ -49,14 +49,41 @@ public abstract class ScalpelApp implements Runnable {
 		this.shutdown();
 	}
 
+	/**
+	 * Runs prior to {@link ScalpelApp#init()}, on the gl thread.
+	 */
 	protected abstract void preInit();
+	/**
+	 * Use this for non-gl related setup of your project. Runs off the main thread.
+	 */
 	protected abstract void init();
+	/**
+	 * Rendering on the GL thread while init() is being run. Remember to swap buffers at the end.
+	 */
 	protected abstract void renderLoadingScreen();
+	/**
+	 * Runs after {@link ScalpelApp#init()}, and before the app load, on the gl thread.
+	 */
 	protected abstract void postInit();
+	/**
+	 * Whether the app loop should continue running. Should reference {@link Window#isOpen()} if you wish for the close button to work.
+	 */
 	protected abstract boolean shouldRun();
+	/**
+	 * Called once every [specified amount of time] in the main loop - less often than app render. Runs on the main (gl) thread.
+	 */
 	protected abstract void tick();
+	/**
+	 * Called every time the game loop runs. Put your rendering here.
+	 */
 	protected abstract void render();
+	/**
+	 * Use this for post render stuff. Swapping window buffers goes here.
+	 */
 	protected abstract void postRender();
+	/**
+	 * Called after the game loop has finished running.
+	 */
 	protected abstract void shutdown();
 
 	protected void runNextQueued() {
