@@ -92,4 +92,8 @@ public class Camera {
 	public void setPitch(float f) {
 		this.pitch = f;
 	}
+
+	public void setYaw(float f) {
+		this.yaw = f;
+	}
 }
