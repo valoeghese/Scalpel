@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
 public final class ResourceLoader {
@@ -27,5 +28,26 @@ public final class ResourceLoader {
 		}
 
 		return new String(buffer.toByteArray(), StandardCharsets.UTF_8);
+	}
+
+	public static ByteBuffer loadAsByteBuffer(String location) throws IOException {
+		InputStream is = load(location);
+		ByteBufferOutputStream buffer = new ByteBufferOutputStream();
+
+		int nBytesRead;
+		byte[] bufferBuffer = new byte[0x4000];
+
+		while ((nBytesRead = is.read(bufferBuffer, 0, bufferBuffer.length)) != -1) {
+			buffer.write(bufferBuffer, 0, nBytesRead);
+		}
+
+		is.close();
+		return buffer.toByteBuffer();
+	}
+
+	public static class ByteBufferOutputStream extends ByteArrayOutputStream {
+		public ByteBuffer toByteBuffer() {
+			return ByteBuffer.wrap(this.buf);
+		}
 	}
 }

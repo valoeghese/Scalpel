@@ -6,7 +6,7 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL.createCapabilities;
 import static org.lwjgl.opengl.GL11.*;
 
-public class GLUtils {
+public final class GLUtils {
 	public static void initGLFW() {
 		if (!glfwInit()) {
 			throw new RuntimeException("Error initialising GLFW");
