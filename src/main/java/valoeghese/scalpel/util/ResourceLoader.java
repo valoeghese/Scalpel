@@ -27,6 +27,7 @@ public final class ResourceLoader {
 			buffer.write(bufferBuffer, 0, nBytesRead);
 		}
 
+		is.close();
 		return new String(buffer.toByteArray(), StandardCharsets.UTF_8);
 	}
 

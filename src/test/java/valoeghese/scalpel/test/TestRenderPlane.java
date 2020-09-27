@@ -28,7 +28,7 @@ public class TestRenderPlane extends ScalpelApp {
 		this.window = new Window("TestRenderPlane", 300, 300);
 		GLUtils.initGL(this.window);
 		this.shader = new Shader("assets/shader/gui_v.glsl", "assets/shader/gui_f.glsl");
-		this.gui = new TestPlaneGUI(GL20.GL_STATIC_DRAW);
+		this.gui = new PlaneGUI(GL20.GL_STATIC_DRAW);
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class TestRenderPlane extends ScalpelApp {
 	protected void render() {
 		this.shader.bind();
 		this.shader.uniformMat4f("projection", this.projection);
-		glBindTexture(GL_TEXTURE_2D, TestPlaneGUI.TEXTURE_TO_USE);
+		glBindTexture(GL_TEXTURE_2D, PlaneGUI.TEXTURE_TO_USE);
 		this.gui.render();
 		glBindTexture(GL_TEXTURE_2D, 0);
 		Shader.unbind();
