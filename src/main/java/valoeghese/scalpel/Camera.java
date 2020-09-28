@@ -73,7 +73,7 @@ public class Camera {
 
 	private static final float NINETY_DEGREES = (float) Math.toRadians(90);
 
-	private static Vector3f getDirectionVector() {
+	public Vector3f getDirection() {
 		double x = Math.sin(yaw) * Math.cos(pitch);
 		double y = -Math.sin(pitch);
 		double z = -Math.cos(yaw) * Math.cos(pitch);
