@@ -71,22 +71,14 @@ public class Camera {
 		}
 	}
 
-	public Vector3f getNormalisedDirection() {
-		double calcYaw = this.yaw + Math.PI;
-		double dxCalc = -Math.sin(calcYaw);
-		double dyCalc = -Math.tan(this.pitch);
-		double dzCalc = Math.cos(calcYaw);
-		return new Vector3f((float) dxCalc, (float) dyCalc, (float) dzCalc).normalize();
-	}
-
 	private static final float NINETY_DEGREES = (float) Math.toRadians(90);
 
-	public Vector3f getGoodDirection() {
-		double calcYaw = this.yaw + Math.PI;
-		double dxCalc = -Math.sin(calcYaw);
-		double dyCalc = -Math.tan(this.pitch);
-		double dzCalc = Math.cos(calcYaw);
-		return new Vector3f((float) dxCalc, (float) dyCalc, (float) dzCalc);
+	private static Vector3f getDirectionVector() {
+		double x = Math.sin(yaw) * Math.cos(pitch);
+		double y = -Math.sin(pitch);
+		double z = -Math.cos(yaw) * Math.cos(pitch);
+
+		return new Vector3f((float) x, (float) y, (float) z);
 	}
 
 	public void setPitch(float f) {
