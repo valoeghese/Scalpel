@@ -22,7 +22,7 @@ public class TestAudio extends ScalpelApp {
 	@Override
 	protected void preInit() {
 		GLUtils.initGLFW();
-		this.window = new Window("TestRenderPlane", 300, 300);
+		this.window = new Window("TestAudio", 300, 300);
 		GLUtils.initGL(this.window);
 
 		ALUtils.initAL();
@@ -75,7 +75,7 @@ public class TestAudio extends ScalpelApp {
 
 	@Override
 	protected void postRender() {
-
+		this.window.swapBuffers();
 	}
 
 	@Override
