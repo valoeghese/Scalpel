@@ -12,12 +12,14 @@ import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
 import valoeghese.scalpel.audio.AudioBuffer;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 
 import static org.lwjgl.openal.AL10.*;
 import static org.lwjgl.openal.ALC10.*;
+import static org.lwjgl.stb.STBVorbis.*;
 import static valoeghese.scalpel.util.GLUtils.NULL;
 
 public final class ALUtils {
@@ -48,26 +50,40 @@ public final class ALUtils {
 		alListener3f(AL_VELOCITY, x, y, z);
 	}
 
-	public static AudioBuffer createBuffer(ByteBuffer data) { // Based off the ogg reading example in lwjglbook
+	// f*ck lwjgl audio
+	public static AudioBuffer createBuffer(String fileName) throws IOException { // https://www.youtube.com/watch?v=Mrcs9vIHSws
 		int soundBuffer = alGenBuffers();
-		soundBuffers.add(soundBuffer);
 
-		try (MemoryStack stack = MemoryStack.stackPush()) {
-			IntBuffer errorBuffer = stack.mallocInt(1);
-			long decoder = STBVorbis.stb_vorbis_open_memory(data, errorBuffer, null);
+		try (STBVorbisInfo info = STBVorbisInfo.malloc()) {
+			ShortBuffer pcm = null;
+			final int bufferSize = 32 * 1024;
 
-			if (decoder == NULL) {
-				throw new RuntimeException("Error opening OGG Vorbis decoder. Error code " + errorBuffer.get(0));
-			}
+			try (MemoryStack stack = MemoryStack.stackPush()) {
+				ByteBuffer vorbis = ResourceLoader.loadAsByteBufferAL(fileName, bufferSize);
+				IntBuffer error = stack.mallocInt(1);
+				long decoder = stb_vorbis_open_memory(vorbis, error, null);
 
-			try (STBVorbisInfo info = STBVorbisInfo.malloc()) {
-				STBVorbis.stb_vorbis_get_info(decoder, info);
+				if (decoder == NULL) {
+					throw new RuntimeException("Error opening Ogg Vorbis decoder. Error code " + error.get(0));
+				}
+
+				stb_vorbis_get_info(decoder, info);
+
 				int channels = info.channels();
-				ShortBuffer resultData = MemoryUtil.memAllocShort(STBVorbis.stb_vorbis_stream_length_in_samples(decoder));
-				resultData.limit(STBVorbis.stb_vorbis_get_samples_short_interleaved(decoder, channels, resultData) * channels);
-				STBVorbis.stb_vorbis_close(channels);
-				return new AudioBuffer(soundBuffer, resultData, channels, info.sample_rate());
+				pcm = MemoryUtil.memAllocShort(stb_vorbis_stream_length_in_samples(decoder));
+				pcm.limit(stb_vorbis_get_samples_short_interleaved(decoder, channels, pcm) * channels);
+				stb_vorbis_close(decoder);
 			}
+
+			if (pcm == null) {
+				throw new IOException("Error importing audio data!");
+			}
+
+			soundBuffers.add(soundBuffer);
+			return new AudioBuffer(soundBuffer, pcm, info.channels(), info.sample_rate());
+		} catch (IOException e) {
+			alDeleteBuffers(soundBuffer);
+			throw e;
 		}
 	}
 

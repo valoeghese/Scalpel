@@ -1,14 +1,14 @@
 package valoeghese.scalpel.test;
 
-import valoeghese.scalpel.audio.AudioBuffer;
 import valoeghese.scalpel.ScalpelApp;
+import valoeghese.scalpel.Window;
+import valoeghese.scalpel.audio.AudioBuffer;
 import valoeghese.scalpel.audio.AudioSource;
 import valoeghese.scalpel.util.ALUtils;
-import valoeghese.scalpel.util.ResourceLoader;
+import valoeghese.scalpel.util.GLUtils;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.nio.ByteBuffer;
 
 public class TestAudio extends ScalpelApp {
 	private TestAudio() {
@@ -17,18 +17,21 @@ public class TestAudio extends ScalpelApp {
 
 	AudioBuffer audio;
 	AudioSource source;
+	private Window window;
 
 	@Override
 	protected void preInit() {
+		GLUtils.initGLFW();
+		this.window = new Window("TestRenderPlane", 300, 300);
+		GLUtils.initGL(this.window);
+
 		ALUtils.initAL();
 
 		ALUtils.setListenerPosition(0, 0, 0);
 		ALUtils.setListenerVelocity(0, 0, 0);
 
 		try {
-			ByteBuffer data = ResourceLoader.loadAsByteBuffer("assets/sound/Test_Sound.ogg");
-			data.flip();
-			audio = ALUtils.createBuffer(data);
+			audio = ALUtils.createBuffer("assets/sound/Test_Sound.ogg");
 		} catch (IOException e) {
 			throw new UncheckedIOException(e);
 		}
@@ -57,12 +60,7 @@ public class TestAudio extends ScalpelApp {
 
 	@Override
 	protected boolean shouldRun() {
-		try {
-			return (char)System.in.read() != 'q';
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		}
+		return this.window.isOpen();
 	}
 
 	@Override
@@ -84,6 +82,7 @@ public class TestAudio extends ScalpelApp {
 	protected void shutdown() {
 		source.destroy();
 		ALUtils.shutdown();
+		this.window.destroy();
 	}
 
 	public static void main(String[] args) {
