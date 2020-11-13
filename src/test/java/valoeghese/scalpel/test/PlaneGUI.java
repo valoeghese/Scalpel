@@ -10,8 +10,8 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public class TestPlaneGUI extends GUI {
-	public TestPlaneGUI(int mode) {
+public class PlaneGUI extends GUI {
+	public PlaneGUI(int mode) {
 		super(mode);
 		this.vertex(-0.5f, 0.5f, -0.5f, 0.0f, 1.0f); // tl
 		this.vertex(-0.5f, -0.5f, -0.5f, 0.0f, 0.0f); // bl
