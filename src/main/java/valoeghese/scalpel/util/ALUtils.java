@@ -3,10 +3,8 @@ package valoeghese.scalpel.util;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import org.lwjgl.openal.AL;
-import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.ALC;
 import org.lwjgl.openal.ALCCapabilities;
-import org.lwjgl.stb.STBVorbis;
 import org.lwjgl.stb.STBVorbisInfo;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
@@ -59,7 +57,7 @@ public final class ALUtils {
 			final int bufferSize = 32 * 1024;
 
 			try (MemoryStack stack = MemoryStack.stackPush()) {
-				ByteBuffer vorbis = ResourceLoader.loadAsByteBufferAL(fileName, bufferSize);
+				ByteBuffer vorbis = ResourceLoader.loadAsByteBuffer(fileName, bufferSize);
 				IntBuffer error = stack.mallocInt(1);
 				long decoder = stb_vorbis_open_memory(vorbis, error, null);
 
