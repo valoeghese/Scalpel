@@ -40,22 +40,7 @@ public final class ResourceLoader {
 		return new String(buffer.toByteArray(), StandardCharsets.UTF_8);
 	}
 
-	public static ByteBuffer loadAsByteBuffer(String location) throws IOException {
-		InputStream is = load(location);
-		ByteBufferOutputStream buffer = new ByteBufferOutputStream();
-
-		int nBytesRead;
-		byte[] bufferBuffer = new byte[0x4000];
-
-		while ((nBytesRead = is.read(bufferBuffer, 0, bufferBuffer.length)) != -1) {
-			buffer.write(bufferBuffer, 0, nBytesRead);
-		}
-
-		is.close();
-		return buffer.toByteBuffer();
-	}
-
-	public static ByteBuffer loadAsByteBufferAL(String resource, int bufferSize) throws IOException { // https://www.youtube.com/watch?v=Mrcs9vIHSws
+	public static ByteBuffer loadAsByteBuffer(String resource, int bufferSize) throws IOException { // https://www.youtube.com/watch?v=Mrcs9vIHSws
 		ByteBuffer buffer;
 		Path path = Paths.get(resource);
 
@@ -89,11 +74,5 @@ public final class ResourceLoader {
 
 		buffer.flip();
 		return buffer;
-	}
-
-	public static class ByteBufferOutputStream extends ByteArrayOutputStream {
-		public ByteBuffer toByteBuffer() {
-			return ByteBuffer.wrap(this.buf);
-		}
 	}
 }
