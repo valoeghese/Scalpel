@@ -48,16 +48,16 @@ public class Shader {
 		}
 
 		// link
-		this.shaderId = glCreateProgram();
+		this.programId = glCreateProgram();
 
-		glAttachShader(this.shaderId, vertex);
-		glAttachShader(this.shaderId, fragment);
-		glLinkProgram(this.shaderId);
+		glAttachShader(this.programId, vertex);
+		glAttachShader(this.programId, fragment);
+		glLinkProgram(this.programId);
 
-		glGetProgramiv(this.shaderId, GL_LINK_STATUS, success);
+		glGetProgramiv(this.programId, GL_LINK_STATUS, success);
 
 		if (success[0] == 0) {
-			throw new RuntimeException("Error linking shaders", new RuntimeException(glGetProgramInfoLog(this.shaderId)));
+			throw new RuntimeException("Error linking shaders", new RuntimeException(glGetProgramInfoLog(this.programId)));
 		}
 
 		// free memory
@@ -66,39 +66,43 @@ public class Shader {
 	}
 
 	public void uniformVec2f(String name, Vector2f vector) {
-		int location = glGetUniformLocation(this.shaderId, name);
+		int location = glGetUniformLocation(this.programId, name);
 		glUniform2f(location, vector.x, vector.y);
 	}
 
 	public void uniformVec3f(String name, Vector3f vector) {
-		int location = glGetUniformLocation(this.shaderId, name);
+		int location = glGetUniformLocation(this.programId, name);
 		glUniform3f(location, vector.x, vector.y, vector.z);
 	}
 
 	public void uniformInt(String name, int value) {
-		int location = glGetUniformLocation(this.shaderId, name);
+		int location = glGetUniformLocation(this.programId, name);
 		glUniform1i(location, value);
 	}
 
 	public void uniformFloat(String name, float value) {
-		int location = glGetUniformLocation(this.shaderId, name);
+		int location = glGetUniformLocation(this.programId, name);
 		glUniform1f(location, value);
 	}
 
 	public void uniformMat4f(String name, Matrix4f matrix) {
-		int location = glGetUniformLocation(this.shaderId, name);
+		int location = glGetUniformLocation(this.programId, name);
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(16);
 		matrix.get(buffer);
 		glUniformMatrix4fv(location, false, buffer);
 	}
 
 	public void bind() {
-		glUseProgram(this.shaderId);
+		glUseProgram(this.programId);
+	}
+
+	public void destroy() {
+		glDeleteProgram(this.programId);
 	}
 
 	public static final void unbind() {
 		glUseProgram(0);
 	}
 
-	private final int shaderId;
+	public final int programId;
 }

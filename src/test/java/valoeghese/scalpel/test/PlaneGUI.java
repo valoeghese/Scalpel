@@ -11,8 +11,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class PlaneGUI extends GUI {
-	public PlaneGUI(int mode) {
-		super(mode);
+	public PlaneGUI() {
+		super(TEXTURE_TO_USE);
 		this.vertex(-0.5f, 0.5f, -0.5f, 0.0f, 1.0f); // tl
 		this.vertex(-0.5f, -0.5f, -0.5f, 0.0f, 0.0f); // bl
 		this.vertex(0.5f, 0.5f, -0.5f, 1.0f, 1.0f); // tr

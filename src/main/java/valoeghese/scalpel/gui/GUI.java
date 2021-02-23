@@ -4,7 +4,6 @@ import it.unimi.dsi.fastutil.floats.FloatArrayList;
 import it.unimi.dsi.fastutil.floats.FloatList;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
-import valoeghese.scalpel.Shader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,16 +85,19 @@ public abstract class GUI implements PseudoGUI {
 		this.vertexArrays.add(new VertexArray(vbo, ebo, vao, indices.length));
 	}
 
-	@Override
-	public final void render() {
-		glBindTexture(GL_TEXTURE_2D, texture);
-
+	public final void renderVertexArrays() {
 		for (VertexArray array : this.vertexArrays) {
 			glBindVertexArray(array.vao);
 			glDrawElements(GL_TRIANGLES, array.elementCount, GL_UNSIGNED_INT, NULL);
 		}
 
 		unbind();
+	}
+
+	@Override
+	public void render() {
+		glBindTexture(GL_TEXTURE_2D, texture);
+		this.renderVertexArrays();
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
