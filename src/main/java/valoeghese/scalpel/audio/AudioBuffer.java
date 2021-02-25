@@ -21,5 +21,5 @@ public class AudioBuffer {
 		alDeleteBuffers(this.soundBuffer);
 	}
 
-	final int soundBuffer;
+	public final int soundBuffer;
 }

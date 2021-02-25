@@ -8,6 +8,10 @@ public abstract class Screen<T extends ScalpelApp> {
 	protected final T game;
 
 	public abstract void renderGUI();
+
+	/**
+	 * For handling mouse movement.
+	 */
 	public abstract void handleMouseInput(double dx, double dy);
 	public abstract void handleKeybinds();
 

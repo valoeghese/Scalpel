@@ -1,7 +1,5 @@
 package valoeghese.scalpel.audio;
 
-import org.lwjgl.openal.AL10;
-
 import static org.lwjgl.openal.AL10.*;
 
 public class AudioSource {
@@ -9,7 +7,7 @@ public class AudioSource {
 		this.source = alGenSources();
 	}
 
-	private final int source;
+	public final int source;
 
 	public void setGain(float gain) {
 		alSourcef(this.source, AL_GAIN, gain);
