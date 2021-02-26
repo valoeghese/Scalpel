@@ -16,10 +16,10 @@ public class RectangleGUI extends GUI {
 
 	protected float[][] protoVertices;
 
-	public void setPosition(float xOffset, float yOffset, float windowAspect) {
+	public void setPosition(float xOffset, float yOffset, float inverseWindowAspect) {
 		this.destroy();
 
-		float aspect = windowAspect;
+		float aspect = inverseWindowAspect;
 
 		int tl = this.vertex(xOffset + aspect * this.protoVertices[0][0], yOffset + this.protoVertices[0][1], 0, 1);
 		int bl = this.vertex(xOffset + aspect * this.protoVertices[1][0], yOffset + this.protoVertices[1][1], 0, 0);
