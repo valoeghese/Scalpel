@@ -68,7 +68,7 @@ public final class ALUtils {
 				stb_vorbis_get_info(decoder, info);
 
 				int channels = info.channels();
-				pcm = MemoryUtil.memAllocShort(stb_vorbis_stream_length_in_samples(decoder));
+				pcm = MemoryUtil.memAllocShort(stb_vorbis_stream_length_in_samples(decoder) * 2);
 				pcm.limit(stb_vorbis_get_samples_short_interleaved(decoder, channels, pcm) * channels);
 				stb_vorbis_close(decoder);
 			}
