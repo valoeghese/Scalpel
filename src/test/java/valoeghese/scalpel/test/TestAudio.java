@@ -15,9 +15,11 @@ public class TestAudio extends ScalpelApp {
 		super(100 / 20);
 	}
 
-	AudioBuffer audio;
+	AudioBuffer audioStereo;
+	AudioBuffer audioMono;
 	AudioSource source;
 	private Window window;
+	boolean playedMonoYet = false;
 
 	@Override
 	protected void preInit() {
@@ -31,7 +33,8 @@ public class TestAudio extends ScalpelApp {
 		ALUtils.setListenerVelocity(0, 0, 0);
 
 		try {
-			audio = ALUtils.createBuffer("assets/sound/Test_Sound.ogg");
+			audioStereo = ALUtils.createBuffer("assets/sound/Test_Sound.ogg");
+			audioMono = ALUtils.createBuffer("assets/sound/Test_Mono.ogg");
 		} catch (IOException e) {
 			throw new UncheckedIOException(e);
 		}
@@ -41,7 +44,7 @@ public class TestAudio extends ScalpelApp {
 		source.setPitch(1.0f);
 		source.setPosition(0, 0, 0);
 		source.setVelocity(0, 0, 0);
-		source.attachBufferData(audio);
+		source.attachBufferData(audioStereo);
 	}
 
 	@Override
@@ -65,12 +68,15 @@ public class TestAudio extends ScalpelApp {
 
 	@Override
 	protected void tick() {
-
 	}
 
 	@Override
 	protected void render() {
-
+		if (!this.playedMonoYet && !this.source.isPlaying()) {
+			this.playedMonoYet = true;
+			this.source.attachBufferData(audioMono);
+			source.play();
+		}
 	}
 
 	@Override

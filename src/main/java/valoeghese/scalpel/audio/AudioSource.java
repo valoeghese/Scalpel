@@ -36,4 +36,8 @@ public class AudioSource {
 	public void destroy() {
 		alDeleteSources(this.source);
 	}
+
+	public boolean isPlaying() {
+		return alGetSourcei(this.source, AL_SOURCE_STATE) == AL_PLAYING;
+	}
 }

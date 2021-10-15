@@ -82,9 +82,12 @@ public abstract class Model {
 	public void destroy() {
 		for (VertexArray array : this.vertexArrays) {
 			glDeleteVertexArrays(array.vao);
+			glDeleteBuffers(array.ebo);
+			glDeleteBuffers(array.vbo);
 		}
 
 		this.vertexArrays = new ArrayList<>();
+
 		this.vTempIndex = 0;
 	}
 
@@ -101,6 +104,33 @@ public abstract class Model {
 		unbind();
 	}
 
+	/**
+	 * @return the {@linkplain VertexArray vertex array} objects containing the opengl object ids.
+	 * @apiNote only use this if you KNOW WHAT YOU ARE DOING. This allows more direct access to precise OpenGL calls.
+	 */
+	public Iterable<VertexArray> getOpenglHandles() {
+		return this.vertexArrays;
+	}
+
+	/**
+	 * @return the {@linkplain VertexArray vertex array} object containing the opengl object ids stored at this position in this model.
+	 * @apiNote only use this if you KNOW WHAT YOU ARE DOING. This allows more direct access to precise OpenGL calls.
+	 */
+	public VertexArray getHandleAt(int index) throws ArrayIndexOutOfBoundsException {
+		return this.vertexArrays.get(index);
+	}
+
+	/**
+	 * Removes and destroys the {@linkplain VertexArray vertex array} object at this position.
+	 * @apiNote only use this if you KNOW WHAT YOU ARE DOING. This allows more direct access to precise OpenGL calls.
+	 */
+	public void destroyHandleAt(int index) {
+		VertexArray array = this.vertexArrays.remove(index);
+		glDeleteVertexArrays(array.vao);
+		glDeleteBuffers(array.ebo);
+		glDeleteBuffers(array.vbo);
+	}
+
 	@Nullable
 	public Shader getShader() {
 		return this.shader;
@@ -110,7 +140,10 @@ public abstract class Model {
 		glBindVertexArray(0);
 	}
 
-	private static class VertexArray {
+	/**
+	 * A container containing
+	 */
+	public static class VertexArray {
 		private VertexArray(int vbo, int ebo, int vao, int elementCount) {
 			this.vbo = vbo;
 			this.ebo = ebo;
@@ -122,5 +155,33 @@ public abstract class Model {
 		private final int ebo;
 		private final int vao;
 		private final int elementCount;
+
+		/**
+		 * @return the vertex buffer object opengl handle.
+		 */
+		public int getVBOHandle() {
+			return this.vbo;
+		}
+
+		/**
+		 * @return the index buffer object opengl handle.
+		 */
+		public int getEBOHandle() {
+			return this.ebo;
+		}
+
+		/**
+		 * @return the array buffer object opengl handle.
+		 */
+		public int getVAOHandle() {
+			return this.vao;
+		}
+
+		/**
+		 * @return the length of the indices buffer object array.
+		 */
+		public int getElementCount() {
+			return this.elementCount;
+		}
 	}
 }
