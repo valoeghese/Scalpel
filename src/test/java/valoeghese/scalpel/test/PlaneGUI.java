@@ -1,7 +1,5 @@
 package valoeghese.scalpel.test;
 
-import valoeghese.scalpel.Model;
-import valoeghese.scalpel.Shader;
 import valoeghese.scalpel.gui.GUI;
 import valoeghese.scalpel.util.ResourceLoader;
 import valoeghese.scalpel.util.TextureLoader;

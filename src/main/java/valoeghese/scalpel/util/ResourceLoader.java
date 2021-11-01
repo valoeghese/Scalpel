@@ -2,7 +2,6 @@ package valoeghese.scalpel.util;
 
 import org.lwjgl.BufferUtils;
 
-import javax.annotation.Resource;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;

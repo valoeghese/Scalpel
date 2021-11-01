@@ -1,18 +1,25 @@
 package valoeghese.scalpel;
 
-public abstract class Screen<T extends ScalpelApp> {
-	public Screen(T game) {
-		this.game = game;
+/**
+ * A simple class representing a screen in the program.
+ */
+public abstract class Screen<T> {
+	public Screen(T app) {
+		this.app = app;
 	}
 
-	protected final T game;
+	protected final T app;
 
-	public abstract void renderGUI();
+	public abstract void render(float tickDelta);
 
 	/**
 	 * For handling mouse movement.
 	 */
-	public abstract void handleMouseInput(double dx, double dy);
+	public abstract void handleMouseMovement(double dx, double dy);
+
+	/**
+	 * For handling keybinds.
+	 */
 	public abstract void handleKeybinds();
 
 	public void tick() {

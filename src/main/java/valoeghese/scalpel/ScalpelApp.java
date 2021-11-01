@@ -5,7 +5,6 @@ import java.util.Queue;
 
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 
 public abstract class ScalpelApp implements Runnable {
 	protected ScalpelApp(int tickDelta) {
@@ -15,6 +14,7 @@ public abstract class ScalpelApp implements Runnable {
 	protected final Queue<Runnable> later = new LinkedList<>();
 	private long nextUpdate = 0;
 	private final int tickDelta;
+	private Float freezeTime = null;
 
 	@Override
 	public void run() {
@@ -41,7 +41,7 @@ public abstract class ScalpelApp implements Runnable {
 			}
 
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			this.render();
+			this.render(this.freezeTime == null ? 1.0f - ((float)(this.nextUpdate - timeMillis) / (float)this.tickDelta) : this.freezeTime);
 			glfwPollEvents();
 			this.postRender();
 		}
@@ -66,17 +66,18 @@ public abstract class ScalpelApp implements Runnable {
 	 */
 	protected abstract void postInit();
 	/**
-	 * Whether the app loop should continue running. Should reference {@link Window#isOpen()} if you wish for the close button to work.
-	 */
-	protected abstract boolean shouldRun();
-	/**
-	 * Called once every [specified amount of time] in the main loop - less often than app render. Runs on the main (gl) thread.
+	 * The game tick.
+	 * @implNote in {@linkplain ScalpelApp}, it is called once every [specified amount of time] in the main loop - less often than app render, and runs on the main (gl) thread.
 	 */
 	protected abstract void tick();
 	/**
 	 * Called every time the game loop runs. Put your rendering here.
 	 */
-	protected abstract void render();
+	protected abstract void render(float tickDelta);
+	/**
+	 * Whether the app loop should continue running. Should reference {@link Window#isOpen()} if you wish for the close button to work.
+	 */
+	protected abstract boolean shouldRun();
 	/**
 	 * Use this for post render stuff. Swapping window buffers goes here.
 	 */
@@ -98,6 +99,14 @@ public abstract class ScalpelApp implements Runnable {
 		if (task != null) {
 			task.run();
 		}
+	}
+
+	protected void freeze() {
+		this.freezeTime = ((float)(this.nextUpdate - System.currentTimeMillis()) / (float)this.tickDelta);
+	}
+
+	protected void unfreeze() {
+		this.freezeTime = null;
 	}
 
 	public void runLater(Runnable callback) {

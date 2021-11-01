@@ -71,7 +71,7 @@ public class TestAudio extends ScalpelApp {
 	}
 
 	@Override
-	protected void render() {
+	protected void render(float tickDelta) {
 		if (!this.playedMonoYet && !this.source.isPlaying()) {
 			this.playedMonoYet = true;
 			this.source.attachBufferData(audioMono);

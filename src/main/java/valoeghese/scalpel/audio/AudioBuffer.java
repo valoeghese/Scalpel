@@ -21,5 +21,24 @@ public class AudioBuffer {
 		alDeleteBuffers(this.soundBuffer);
 	}
 
+	/**
+	 * @return the length of the audio in this buffer, in samples
+	 */
+	public int getLengthSamples() {
+		return alGetBufferi(this.soundBuffer, AL_SIZE) * 8 /
+				(alGetBufferi(this.soundBuffer, AL_BITS) * this.getChannels());
+	}
+
+	/**
+	 * @return the duration of the audio in this buffer, in seconds
+	 */
+	public float getDurationSeconds() {
+		return (float) this.getLengthSamples() / (float) alGetBufferi(this.soundBuffer, AL_FREQUENCY);
+	}
+
+	public int getChannels() {
+		return alGetBufferi(this.soundBuffer, AL_CHANNELS);
+	}
+
 	public final int soundBuffer;
 }

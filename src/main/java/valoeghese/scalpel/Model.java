@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.floats.FloatList;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import org.joml.Matrix4f;
+import valoeghese.scalpel.Shader;
 import valoeghese.scalpel.util.GLUtils;
 
 import javax.annotation.Nullable;

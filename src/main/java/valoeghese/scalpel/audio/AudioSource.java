@@ -25,6 +25,10 @@ public class AudioSource {
 		alSource3f(this.source, AL_VELOCITY, x, y, z);
 	}
 
+	public void setLooping(boolean looping) {
+		alSourcei(this.source, AL_LOOPING, looping ? AL_TRUE : AL_FALSE);
+	}
+
 	public void attachBufferData(AudioBuffer data) {
 		alSourcei(this.source, AL_BUFFER, data.soundBuffer);
 	}
@@ -39,5 +43,9 @@ public class AudioSource {
 
 	public boolean isPlaying() {
 		return alGetSourcei(this.source, AL_SOURCE_STATE) == AL_PLAYING;
+	}
+
+	public boolean isLooping() {
+		return alGetSourcei(this.source, AL_LOOPING) == AL_TRUE;
 	}
 }

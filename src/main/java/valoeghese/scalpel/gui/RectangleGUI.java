@@ -1,6 +1,4 @@
-package valoeghese.scalpel;
-
-import valoeghese.scalpel.gui.GUI;
+package valoeghese.scalpel.gui;
 
 public class RectangleGUI extends GUI {
 	public RectangleGUI(int texture, float xSize, float ySize) {

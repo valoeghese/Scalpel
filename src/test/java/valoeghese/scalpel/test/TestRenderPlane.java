@@ -2,15 +2,11 @@ package valoeghese.scalpel.test;
 
 import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.opengl.GL20;
 import valoeghese.scalpel.ScalpelApp;
 import valoeghese.scalpel.Shader;
 import valoeghese.scalpel.Window;
 import valoeghese.scalpel.gui.GUI;
 import valoeghese.scalpel.util.GLUtils;
-
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.glBindTexture;
 
 public class TestRenderPlane extends ScalpelApp {
 	private TestRenderPlane() {
@@ -53,7 +49,7 @@ public class TestRenderPlane extends ScalpelApp {
 	}
 
 	@Override
-	protected void render() {
+	protected void render(float tickDelta) {
 		this.shader.bind();
 		this.shader.uniformMat4f("projection", this.projection);
 		this.gui.render();

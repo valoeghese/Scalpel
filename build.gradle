@@ -1,12 +1,12 @@
 apply plugin: 'java-library'
-sourceCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_11
 
 if (org.gradle.internal.os.OperatingSystem.current() == org.gradle.internal.os.OperatingSystem.MAC_OS) {
     applicationDefaultJvmArgs = ["-XstartOnFirstThread"]
 }
 
 group 'valoeghese'
-version '1.1.4'
+version '1.2.0'
 
 switch (org.gradle.internal.os.OperatingSystem.current()) {
     case org.gradle.internal.os.OperatingSystem.LINUX:
