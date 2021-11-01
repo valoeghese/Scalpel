@@ -32,10 +32,16 @@ public abstract class ScalpelApp implements Runnable {
 
 		this.postInit();
 
+		long lastUpdate = System.currentTimeMillis();
+
 		while (this.shouldRun()) {
 			long timeMillis = System.currentTimeMillis();
 
-			if (timeMillis >= this.nextUpdate) {
+			if (timeMillis < lastUpdate) {
+				System.out.println("Time Moved Backwards! Did the system timezone change?");
+				this.nextUpdate = timeMillis + this.tickDelta / 2;
+			} else if (timeMillis >= this.nextUpdate) {
+				lastUpdate = timeMillis;
 				this.nextUpdate = timeMillis + this.tickDelta;
 				if (this.freezeTime == null) this.tick();
 			}
@@ -106,6 +112,7 @@ public abstract class ScalpelApp implements Runnable {
 	}
 
 	protected void unfreeze() {
+		this.nextUpdate = System.currentTimeMillis() + this.tickDelta - (int) (this.freezeTime * this.tickDelta);
 		this.freezeTime = null;
 	}
 
