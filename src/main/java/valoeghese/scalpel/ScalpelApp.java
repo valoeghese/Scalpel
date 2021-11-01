@@ -37,7 +37,7 @@ public abstract class ScalpelApp implements Runnable {
 
 			if (timeMillis >= this.nextUpdate) {
 				this.nextUpdate = timeMillis + this.tickDelta;
-				this.tick();
+				if (this.freezeTime == null) this.tick();
 			}
 
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
