@@ -30,11 +30,18 @@ public abstract class Model {
 	private final int mode;
 	@Nullable
 	private final Shader shader;
+	private VertexFormat vertexFormat;
 
+	protected void setVertexFormat(VertexFormat format) {
+		this.vertexFormat = format;
+	}
+
+	@Deprecated
 	protected int vertex(float x, float y, float z, float u, float v) {
 		return this.vertex(x, y, z, u, v, 1.0f);
 	}
 
+	@Deprecated
 	protected int vertex(float x, float y, float z, float u, float v, float light) {
 		this.vTemp.add(x);
 		this.vTemp.add(y);
@@ -69,12 +76,7 @@ public abstract class Model {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, this.mode);
 
-		glVertexAttribPointer(0, 3, GL_FLOAT, false,4 * 6, 4 * 0);
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(1, 2, GL_FLOAT, false, 4 * 6, 4 * 3);
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(2, 1, GL_FLOAT, false, 4 * 6, 4 * 5);
-		glEnableVertexAttribArray(2);
+		this.vertexFormat.applyFormat();
 		glBindVertexArray(0);
 
 		this.vertexArrays.add(new VertexArray(vbo, ebo, vao, indices.length));
@@ -141,6 +143,11 @@ public abstract class Model {
 		glBindVertexArray(0);
 	}
 
+	private static final VertexFormat LEGACY = new VertexFormat.Builder()
+			.add(GL_FLOAT, 3)
+			.add(GL_FLOAT, 2)
+			.add(GL_FLOAT, 1)
+			.build();
 	/**
 	 * A container containing
 	 */
