@@ -49,6 +49,7 @@ public abstract class Model {
 		this.vTemp.add(u);
 		this.vTemp.add(v);
 		this.vTemp.add(light);
+		this.vertexFormat = LEGACY;
 		return this.vTempIndex++;
 	}
 
