@@ -1,4 +1,4 @@
-package valoeghese.scalpel;
+package valoeghese.scalpel.scene;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,10 @@ public class VertexFormat {
 	private final Entry[] format;
 	private final int stride;
 
-	void applyFormat() {
+	/**
+	 * Applies this vertex format to the current buffer object.
+	 */
+	public void applyFormat() {
 		for (int index = 0; index < this.format.length; ++index) {
 			Entry attribute = this.format[index];
 			glVertexAttribPointer(index, attribute.size, attribute.type, attribute.normalised, this.stride, attribute.pointer);

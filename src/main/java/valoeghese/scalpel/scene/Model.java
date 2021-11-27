@@ -1,59 +1,123 @@
-package valoeghese.scalpel;
+package valoeghese.scalpel.scene;
 
 import it.unimi.dsi.fastutil.floats.FloatArrayList;
-import it.unimi.dsi.fastutil.floats.FloatList;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import org.joml.Matrix4f;
-import valoeghese.scalpel.scene.VertexFormat;
+import valoeghese.scalpel.Shader;
 import valoeghese.scalpel.util.GLUtils;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.lwjgl.opengl.GL11.GL_FLOAT;
+import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
+import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
+import static org.lwjgl.opengl.GL11.glDrawElements;
 import static org.lwjgl.opengl.GL15.*;
+import static org.lwjgl.opengl.GL15.glDeleteBuffers;
 import static org.lwjgl.opengl.GL30.*;
+import static org.lwjgl.opengl.GL30.glBindVertexArray;
 
-@Deprecated
 public abstract class Model {
 	protected Model(int mode, @Nullable Shader shader) {
 		this.mode = mode;
 		this.shader = shader;
 	}
 
-	private FloatList vTemp = new FloatArrayList();
+	private List<Object> vTemp = new ArrayList<>();
 	private int vTempIndex = 0;
 	private IntList iTemp = new IntArrayList();
 	private List<VertexArray> vertexArrays = new ArrayList<>();
 	private final int mode;
 	@Nullable
 	private final Shader shader;
+	private VertexFormat vertexFormat;
 
-	protected int vertex(float x, float y, float z, float u, float v) {
-		return this.vertex(x, y, z, u, v, 1.0f);
+	protected void setVertexFormat(VertexFormat format) {
+		this.vertexFormat = format;
 	}
 
-	protected int vertex(float x, float y, float z, float u, float v, float light) {
-		this.vTemp.add(x);
-		this.vTemp.add(y);
-		this.vTemp.add(z);
-		this.vTemp.add(u);
-		this.vTemp.add(v);
-		this.vTemp.add(light);
+	protected int vertex(Object o0) {
+		this.vTemp.add(o0);
 		return this.vTempIndex++;
 	}
 
-	protected void tri(int i0, int i1, int i2) {
-		this.iTemp.add(i0);
-		this.iTemp.add(i1);
-		this.iTemp.add(i2);
+	protected int vertex(Object o0, Object o1) {
+		this.vTemp.add(o0);
+		this.vTemp.add(o1);
+		return this.vTempIndex++;
+	}
+
+	protected int vertex(Object o0, Object o1, Object o2) {
+		this.vTemp.add(o0);
+		this.vTemp.add(o1);
+		this.vTemp.add(o2);
+		return this.vTempIndex++;
+	}
+
+	protected int vertex(Object o0, Object o1, Object o2, Object o3) {
+		this.vTemp.add(o0);
+		this.vTemp.add(o1);
+		this.vTemp.add(o2);
+		this.vTemp.add(o3);
+		return this.vTempIndex++;
+	}
+
+	protected int vertex(Object o0, Object o1, Object o2, Object o3, Object o4) {
+		this.vTemp.add(o0);
+		this.vTemp.add(o1);
+		this.vTemp.add(o2);
+		this.vTemp.add(o3);
+		this.vTemp.add(o4);
+		return this.vTempIndex++;
+	}
+
+	protected int vertex(Object o0, Object o1, Object o2, Object o3, Object o4, Object o5) {
+		this.vTemp.add(o0);
+		this.vTemp.add(o1);
+		this.vTemp.add(o2);
+		this.vTemp.add(o3);
+		this.vTemp.add(o4);
+		this.vTemp.add(o5);
+		return this.vTempIndex++;
+	}
+
+	protected int vertex(Object o0, Object o1, Object o2, Object o3, Object o4, Object o5, Object o6) {
+		this.vTemp.add(o0);
+		this.vTemp.add(o1);
+		this.vTemp.add(o2);
+		this.vTemp.add(o3);
+		this.vTemp.add(o4);
+		this.vTemp.add(o5);
+		this.vTemp.add(o6);
+		return this.vTempIndex++;
+	}
+
+	protected int vertex(Object o0, Object o1, Object o2, Object o3, Object o4, Object o5, Object o6, Object o7, Object... objects) {
+		this.vTemp.add(o0);
+		this.vTemp.add(o1);
+		this.vTemp.add(o2);
+		this.vTemp.add(o3);
+		this.vTemp.add(o4);
+		this.vTemp.add(o5);
+		this.vTemp.add(o6);
+		this.vTemp.add(o7);
+
+		for (Object o : objects) {
+			this.vTemp.add(o);
+		}
+
+		return this.vTempIndex++;
 	}
 
 	protected void generateBuffers() {
-		float[] vertices = this.vTemp.toFloatArray();
+		if (this.vertexFormat == null) throw new IllegalStateException("Must specify a vertex format!");
+
+		Object[] vertices = this.vTemp.toArray();
 		int[] indices = this.iTemp.toIntArray();
-		this.vTemp = new FloatArrayList();
+		this.vTemp = new ArrayList<>();
 		this.iTemp = new IntArrayList();
 
 		int vbo = glGenBuffers();
@@ -68,7 +132,7 @@ public abstract class Model {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, this.mode);
 
-		LEGACY_FORMAT.applyFormat();
+		this.vertexFormat.applyFormat();
 		glBindVertexArray(0);
 
 		this.vertexArrays.add(new VertexArray(vbo, ebo, vao, indices.length));
@@ -140,8 +204,9 @@ public abstract class Model {
 			.add(GL_FLOAT, 2)
 			.add(GL_FLOAT, 1)
 			.build();
+
 	/**
-	 * A container containing
+	 * A container containing the vertex buffer object, element (index) buffer object, and vertex array object.
 	 */
 	public static class VertexArray {
 		private VertexArray(int vbo, int ebo, int vao, int elementCount) {
