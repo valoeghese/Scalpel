@@ -18,6 +18,7 @@ public class BufferBuilder {
 	protected void expandIfNecessary(int requiredNBytes) {
 		// Sets the buffer in this BufferBuilder to a new, expanded buffer.
 		// Created with the help of Devan Kerman and Ramidzkh, who provided advice and an example of how they did it.
+		// The code isn't identical to theirs, however there are a few similarities.
 
 		if (this.buffer.remaining() < requiredNBytes) {
 			// setup
