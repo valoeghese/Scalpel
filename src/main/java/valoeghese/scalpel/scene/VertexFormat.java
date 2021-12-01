@@ -1,6 +1,7 @@
 package valoeghese.scalpel.scene;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.lwjgl.opengl.GL30.*;
@@ -23,10 +24,18 @@ public class VertexFormat {
 	}
 
 	/**
-	 * Applies this vertex format to the current buffer object.
-	 * This is primarily used internally, however it has been left public for those who want to use more raw GL in generating their buffer objects. This may change in a future version of Scalpel.
+	 * @return a copy of the array of entries in this vertex format. This is the specification for the format, as given in the builder which created this format.
 	 */
-	public void applyFormat() {
+	public Entry[] getEntries() {
+		Entry[] result = new Entry[this.format.length];
+		System.arraycopy(this.format, 0, result, 0, result.length);
+		return result;
+	}
+
+	/**
+	 * Applies this vertex format to the current buffer object.
+	 */
+	void applyFormat() {
 		for (int index = 0; index < this.format.length; ++index) {
 			Entry attribute = this.format[index];
 			glVertexAttribPointer(index, attribute.size, attribute.type, attribute.normalised, this.stride, attribute.pointer);
@@ -85,7 +94,7 @@ public class VertexFormat {
 		}
 	}
 
-	static class Entry {
+	public static class Entry {
 		private Entry(int type, int size, int pointer, boolean normalised) {
 			this.type = type;
 			this.size = size;
@@ -93,9 +102,37 @@ public class VertexFormat {
 			this.normalised = normalised;
 		}
 
-		final int type;
-		final int size;
+		private final int type;
+		private final int size;
 		private final int pointer;
 		private final boolean normalised;
+
+		/**
+		 * @return the OpenGL type of this entry. For example, {@code GL_FLOAT}.
+		 */
+		public int getType() {
+			return this.type;
+		}
+
+		/**
+		 * @return the size of this entry. This determines the number of the given type in this entry. For example, a size 3 float represents a {@code vec3} in GLSL.
+		 */
+		public int getSize() {
+			return this.size;
+		}
+
+		/**
+		 * @return the offset of this entry in the vertex buffer object data.
+		 */
+		public int getPointer() {
+			return this.pointer;
+		}
+
+		/**
+		 * @return whether OpenGL should normalise this entry's data.
+		 */
+		public boolean isNormalised() {
+			return this.normalised;
+		}
 	}
 }
