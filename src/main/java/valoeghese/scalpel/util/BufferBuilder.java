@@ -17,8 +17,7 @@ public class BufferBuilder {
 
 	protected void expandIfNecessary(int requiredNBytes) {
 		// Sets the buffer in this BufferBuilder to a new, expanded buffer.
-		// Created with the help of Devan Kerman and Ramidzkh, who provided advice and an example of how they did it.
-		// The code isn't identical to theirs, however there are a few similarities.
+		// Based vaguely off of an implementation by Devan Kerman and Ramidzkh, who provided an example of a BufferBuilder when I was going to take a different approach to vertex objects
 
 		if (this.buffer.remaining() < requiredNBytes) {
 			// setup
