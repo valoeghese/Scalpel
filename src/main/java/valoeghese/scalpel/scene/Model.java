@@ -26,8 +26,6 @@ public abstract class Model {
 		this.shader = shader;
 	}
 
-	private List<Object> vTemp = new ArrayList<>();
-	private int vTempIndex = 0;
 	private IntList iTemp = new IntArrayList();
 	private List<VertexArray> vertexArrays = new ArrayList<>();
 	private final int mode;
@@ -43,28 +41,10 @@ public abstract class Model {
 		return this.vertexFormat;
 	}
 
-	protected void generateBuffers() {
+	protected void generateBuffers(ByteBuffer vertices) {
 		if (this.vertexFormat == null) throw new IllegalStateException("Must specify a vertex format!");
 
-		ByteBuffer vertices = ByteBuffer.allocateDirect(this.vTempIndex * this.vertexFormat.getVertexSize());
-
-		for (Object o : this.vTemp) {
-			if (o instanceof Byte) {
-				vertices.put((Byte) o);
-			} else if (o instanceof Integer) {
-				vertices.putInt((Integer) o);
-			} else if (o instanceof Float) {
-				vertices.putFloat((Float) o);
-			} else if (o instanceof Long) {
-				vertices.putLong((Long) o);
-			} else if (o instanceof Double) {
-				vertices.putDouble((Double) o);
-			}
- 		}
-
 		int[] indices = this.iTemp.toIntArray();
-
-		this.vTemp = new ArrayList<>();
 		this.iTemp = new IntArrayList();
 
 		int vbo = glGenBuffers();
@@ -93,8 +73,6 @@ public abstract class Model {
 		}
 
 		this.vertexArrays = new ArrayList<>();
-
-		this.vTempIndex = 0;
 	}
 
 	public final void render(Matrix4f transform) {

@@ -34,6 +34,18 @@ public class BufferBuilder {
 		}
 	}
 
+	public BufferBuilder add(byte value) {
+		this.expandIfNecessary(1);
+		this.buffer.put(value);
+		return this;
+	}
+
+	public BufferBuilder add(short value) {
+		this.expandIfNecessary(2);
+		this.buffer.putShort(value);
+		return this;
+	}
+
 	public BufferBuilder add(int value) {
 		this.expandIfNecessary(4);
 		this.buffer.putInt(value);
@@ -41,16 +53,19 @@ public class BufferBuilder {
 	}
 
 	public BufferBuilder add(float value) {
+		this.expandIfNecessary(4);
 		this.buffer.putFloat(value);
 		return this;
 	}
 
 	public BufferBuilder add(double value) {
+		this.expandIfNecessary(8);
 		this.buffer.putDouble(value);
 		return this;
 	}
 
 	public BufferBuilder add(long value) {
+		this.expandIfNecessary(8);
 		this.buffer.putLong(value);
 		return this;
 	}

@@ -5,9 +5,9 @@ import java.util.List;
 
 import static org.lwjgl.opengl.GL30.*;
 
-public class VertexFormat {
+public class VertexFormat<R> {
 	private VertexFormat(VertexFormat.Builder builder) {
-		this.format = builder.entries.toArray(Entry[]::new);
+		this.format = (Entry[]) builder.entries.toArray(Entry[]::new);
 		this.stride = builder.stride;
 	}
 
@@ -58,7 +58,7 @@ public class VertexFormat {
 		}
 	}
 
-	public static class Builder {
+	public static class Builder<E> {
 		private final List<Entry> entries = new ArrayList<>();
 		private int stride;
 
@@ -96,8 +96,8 @@ public class VertexFormat {
 			this.normalised = normalised;
 		}
 
-		private final int type;
-		private final int size;
+		final int type;
+		final int size;
 		private final int pointer;
 		private final boolean normalised;
 	}
