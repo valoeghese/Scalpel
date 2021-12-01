@@ -26,7 +26,7 @@ public class PlaneModel extends Model {
 
 		this.tri(tl, bl, br);
 		this.tri(tl, tr, br);
-		this.generateBuffers(builder.getBuffer());
+		this.generateBuffers(builder.getBuffer().flip());
 	}
 
 	private static final VertexFormat POS_UV = new VertexFormat.Builder()
