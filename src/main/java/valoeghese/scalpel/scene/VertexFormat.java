@@ -15,6 +15,13 @@ public class VertexFormat {
 	private final int stride;
 
 	/**
+	 * @return the vertex size in bytes. This is identical to the stride length.
+	 */
+	public int getVertexSize() {
+		return this.stride;
+	}
+
+	/**
 	 * Applies this vertex format to the current buffer object.
 	 */
 	public void applyFormat() {
@@ -81,7 +88,7 @@ public class VertexFormat {
 		}
 	}
 
-	private static class Entry {
+	static class Entry {
 		private Entry(int type, int size, int pointer, boolean normalised) {
 			this.type = type;
 			this.size = size;

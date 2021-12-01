@@ -1,6 +1,5 @@
 package valoeghese.scalpel.scene;
 
-import it.unimi.dsi.fastutil.floats.FloatArrayList;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import org.joml.Matrix4f;
@@ -8,6 +7,7 @@ import valoeghese.scalpel.Shader;
 import valoeghese.scalpel.util.GLUtils;
 
 import javax.annotation.Nullable;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,84 +39,31 @@ public abstract class Model {
 		this.vertexFormat = format;
 	}
 
-	protected int vertex(Object o0) {
-		this.vTemp.add(o0);
-		return this.vTempIndex++;
-	}
-
-	protected int vertex(Object o0, Object o1) {
-		this.vTemp.add(o0);
-		this.vTemp.add(o1);
-		return this.vTempIndex++;
-	}
-
-	protected int vertex(Object o0, Object o1, Object o2) {
-		this.vTemp.add(o0);
-		this.vTemp.add(o1);
-		this.vTemp.add(o2);
-		return this.vTempIndex++;
-	}
-
-	protected int vertex(Object o0, Object o1, Object o2, Object o3) {
-		this.vTemp.add(o0);
-		this.vTemp.add(o1);
-		this.vTemp.add(o2);
-		this.vTemp.add(o3);
-		return this.vTempIndex++;
-	}
-
-	protected int vertex(Object o0, Object o1, Object o2, Object o3, Object o4) {
-		this.vTemp.add(o0);
-		this.vTemp.add(o1);
-		this.vTemp.add(o2);
-		this.vTemp.add(o3);
-		this.vTemp.add(o4);
-		return this.vTempIndex++;
-	}
-
-	protected int vertex(Object o0, Object o1, Object o2, Object o3, Object o4, Object o5) {
-		this.vTemp.add(o0);
-		this.vTemp.add(o1);
-		this.vTemp.add(o2);
-		this.vTemp.add(o3);
-		this.vTemp.add(o4);
-		this.vTemp.add(o5);
-		return this.vTempIndex++;
-	}
-
-	protected int vertex(Object o0, Object o1, Object o2, Object o3, Object o4, Object o5, Object o6) {
-		this.vTemp.add(o0);
-		this.vTemp.add(o1);
-		this.vTemp.add(o2);
-		this.vTemp.add(o3);
-		this.vTemp.add(o4);
-		this.vTemp.add(o5);
-		this.vTemp.add(o6);
-		return this.vTempIndex++;
-	}
-
-	protected int vertex(Object o0, Object o1, Object o2, Object o3, Object o4, Object o5, Object o6, Object o7, Object... objects) {
-		this.vTemp.add(o0);
-		this.vTemp.add(o1);
-		this.vTemp.add(o2);
-		this.vTemp.add(o3);
-		this.vTemp.add(o4);
-		this.vTemp.add(o5);
-		this.vTemp.add(o6);
-		this.vTemp.add(o7);
-
-		for (Object o : objects) {
-			this.vTemp.add(o);
-		}
-
-		return this.vTempIndex++;
+	protected VertexFormat getVertexFormat() {
+		return this.vertexFormat;
 	}
 
 	protected void generateBuffers() {
 		if (this.vertexFormat == null) throw new IllegalStateException("Must specify a vertex format!");
 
-		Object[] vertices = this.vTemp.toArray();
+		ByteBuffer vertices = ByteBuffer.allocateDirect(this.vTempIndex * this.vertexFormat.getVertexSize());
+
+		for (Object o : this.vTemp) {
+			if (o instanceof Byte) {
+				vertices.put((Byte) o);
+			} else if (o instanceof Integer) {
+				vertices.putInt((Integer) o);
+			} else if (o instanceof Float) {
+				vertices.putFloat((Float) o);
+			} else if (o instanceof Long) {
+				vertices.putLong((Long) o);
+			} else if (o instanceof Double) {
+				vertices.putDouble((Double) o);
+			}
+ 		}
+
 		int[] indices = this.iTemp.toIntArray();
+
 		this.vTemp = new ArrayList<>();
 		this.iTemp = new IntArrayList();
 
