@@ -60,12 +60,20 @@ public abstract class Model {
 		glBindVertexArray(vao);
 
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		glBufferData(GL_ARRAY_BUFFER, vertices, this.mode);
+		//glBufferData(GL_ARRAY_BUFFER, vertices, this.mode);
+		glBufferData(GL_ARRAY_BUFFER, new float[]{-0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
+				-0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
+				0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+				0.5f, -0.5f, -0.5f, 1.0f, 0.0f}, this.mode);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, this.mode);
 
-		this.vertexFormat.applyFormat();
+		//this.vertexFormat.applyFormat();
+		glVertexAttribPointer(0, 3, GL_FLOAT, false, 4 * 5, 4 * 0);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(1, 2, GL_FLOAT, false, 4 * 5, 4 * 3);
+		glEnableVertexAttribArray(1);
 		glBindVertexArray(0);
 
 		this.vertexArrays.add(new VertexArray(vbo, ebo, vao, indices.length));
