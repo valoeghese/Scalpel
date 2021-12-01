@@ -2,6 +2,7 @@ package valoeghese.scalpel;
 
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.glfw.GLFWWindowSizeCallbackI;
+import valoeghese.scalpel.audio.AudioBuffer;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static valoeghese.scalpel.util.GLUtils.NULL;
@@ -35,9 +36,25 @@ public class Window implements GLFWWindowSizeCallbackI {
 		this.aspect = (float) width / (float) height;
 	}
 
+	/**
+	 * @deprecated use {@linkplain Window#getHandle()} instead.
+	 */
+	@Deprecated
 	public final long id;
+	/**
+	 * @deprecated use {@linkplain Window#getWidth()} instead.
+	 */
+	@Deprecated
 	public int width;
+	/**
+	 * @deprecated use {@linkplain Window#getHeight()} instead.
+	 */
+	@Deprecated
 	public int height;
+	/**
+	 * @deprecated use {@linkplain Window#getAspect()} instead.
+	 */
+	@Deprecated
 	public float aspect;
 
 	public boolean isOpen() {
@@ -67,6 +84,28 @@ public class Window implements GLFWWindowSizeCallbackI {
 		float x = clampMap((float) xbuf[0], 0, this.width, -1.0f, 1.0f);
 		float y = clampMap((float) ybuf[0], this.height, 0, -1.0f, 1.0f);
 		return new float[] {x, y};
+	}
+
+	public int getWidth() {
+		return this.width;
+	}
+
+	public int getHeight() {
+		return this.height;
+	}
+
+	/**
+	 * @return the aspect of this window, computed as {@code (float)width / (float)height}.
+	 */
+	public float getAspect() {
+		return this.aspect;
+	}
+
+	/**
+	 * @return the underlying GLFW window object.
+	 */
+	public long getHandle() {
+		return this.id;
 	}
 
 	private static float clampMap(float value, float min, float max, float newmin, float newmax) {

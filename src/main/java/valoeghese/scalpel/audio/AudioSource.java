@@ -7,6 +7,10 @@ public class AudioSource {
 		this.source = alGenSources();
 	}
 
+	/**
+	 * @deprecated use {@linkplain AudioSource#getHandle()} instead.
+	 */
+	@Deprecated
 	public final int source;
 
 	public void setGain(float gain) {
@@ -47,5 +51,12 @@ public class AudioSource {
 
 	public boolean isLooping() {
 		return alGetSourcei(this.source, AL_LOOPING) == AL_TRUE;
+	}
+
+	/**
+	 * @return the underlying OpenGL source object.
+	 */
+	public int getHandle() {
+		return this.source;
 	}
 }

@@ -48,9 +48,8 @@ public final class ALUtils {
 		alListener3f(AL_VELOCITY, x, y, z);
 	}
 
-	// f*ck lwjgl audio
 	public static AudioBuffer createBuffer(String fileName) throws IOException { // https://www.youtube.com/watch?v=Mrcs9vIHSws
-		int soundBuffer = alGenBuffers();
+		int audioBuffer = alGenBuffers();
 
 		try (STBVorbisInfo info = STBVorbisInfo.malloc()) {
 			ShortBuffer pcm = null;
@@ -77,20 +76,20 @@ public final class ALUtils {
 				throw new IOException("Error importing audio data!");
 			}
 
-			soundBuffers.add(soundBuffer);
-			return new AudioBuffer(soundBuffer, pcm, info.channels(), info.sample_rate());
+			audioBuffers.add(audioBuffer);
+			return new AudioBuffer(audioBuffer, pcm, info.channels(), info.sample_rate());
 		} catch (IOException e) {
-			alDeleteBuffers(soundBuffer);
+			alDeleteBuffers(audioBuffer);
 			throw e;
 		}
 	}
 
 	public static void removeSoundBuffer(int soundBuffer) {
-		soundBuffers.removeInt(soundBuffer);
+		audioBuffers.removeInt(soundBuffer);
 	}
 
 	public static void shutdown() {
-		for (int soundBuffer : soundBuffers) {
+		for (int soundBuffer : audioBuffers) {
 			alDeleteBuffers(soundBuffer);
 		}
 
@@ -100,5 +99,5 @@ public final class ALUtils {
 
 	private static long device;
 	private static long context;
-	private static IntList soundBuffers = new IntArrayList();
+	private static IntList audioBuffers = new IntArrayList();
 }

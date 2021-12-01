@@ -7,14 +7,20 @@ import java.nio.ShortBuffer;
 import static org.lwjgl.openal.AL10.*;
 
 public class AudioBuffer {
-	public AudioBuffer(int soundBuffer, ShortBuffer data, int channels, int sampleRate) {
-		alBufferData(soundBuffer, channels == 1 ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16, data, sampleRate);
-		this.soundBuffer = soundBuffer;
+	public AudioBuffer(int audioBuffer, ShortBuffer data, int channels, int sampleRate) {
+		alBufferData(audioBuffer, channels == 1 ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16, data, sampleRate);
+		this.soundBuffer = audioBuffer;
 	}
 
-	public AudioBuffer(int soundBuffer) {
-		this.soundBuffer = soundBuffer;
+	public AudioBuffer(int audioBuffer) {
+		this.soundBuffer = audioBuffer;
 	}
+
+	/**
+	 * @deprecated use {@linkplain AudioBuffer#getHandle()} instead.
+	 */
+	@Deprecated
+	public final int soundBuffer;
 
 	public void destroy() {
 		ALUtils.removeSoundBuffer(this.soundBuffer);
@@ -40,5 +46,10 @@ public class AudioBuffer {
 		return alGetBufferi(this.soundBuffer, AL_CHANNELS);
 	}
 
-	public final int soundBuffer;
+	/**
+	 * @return the underlying OpenGL buffer object.
+	 */
+	public int getHandle() {
+		return this.soundBuffer;
+	}
 }

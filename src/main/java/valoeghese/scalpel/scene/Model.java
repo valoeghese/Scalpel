@@ -136,7 +136,7 @@ public abstract class Model {
 		}
 
 		/**
-		 * @return the index buffer object opengl handle.
+		 * @return the element (index) buffer object opengl handle.
 		 */
 		public int getEBOHandle() {
 			return this.ebo;
