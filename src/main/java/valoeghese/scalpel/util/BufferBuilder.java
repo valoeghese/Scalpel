@@ -13,9 +13,9 @@ public class BufferBuilder {
 		this.buffer.order(ByteOrder.nativeOrder());
 	}
 
-	private ByteBuffer buffer;
+	protected ByteBuffer buffer;
 
-	private void expandIfNecessary(int requiredNBytes) {
+	protected void expandIfNecessary(int requiredNBytes) {
 		if (this.buffer.remaining() < requiredNBytes) {
 			// setup
 			int limit = this.buffer.limit();

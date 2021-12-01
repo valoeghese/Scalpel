@@ -41,6 +41,12 @@ public abstract class Model {
 		return this.vertexFormat;
 	}
 
+	protected void tri(int i0, int i1, int i2) {
+		this.iTemp.add(i0);
+		this.iTemp.add(i1);
+		this.iTemp.add(i2);
+	}
+
 	protected void generateBuffers(ByteBuffer vertices) {
 		if (this.vertexFormat == null) throw new IllegalStateException("Must specify a vertex format!");
 
