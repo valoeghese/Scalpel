@@ -41,6 +41,10 @@ public class Camera {
 		this.view.translate(this.pos);
 	}
 
+	/**
+	 * @deprecated in favour of the {@linkplain valoeghese.scalpel.scene.Model new model system introduced in scalpel 1.3.0}. Instead, get the view with {@link Camera#getView}, set the shader transform and view with {@link Shader#uniformMat4f(String, Matrix4f)}, and then render the model.
+	 */
+	@Deprecated
 	public void render(Model model, Matrix4f transform) {
 		model.getShader().uniformMat4f("view", this.view);
 		model.render(transform);
@@ -54,9 +58,8 @@ public class Camera {
 		return this.pitch;
 	}
 
-	public void setPos(float x, float y, float z) {
-		this.pos = new Vector3f(x, y, z);
-		this.rebuildView();
+	public Matrix4f getView() {
+		return this.view;
 	}
 
 	public void wrapYaw() {
@@ -87,5 +90,10 @@ public class Camera {
 
 	public void setYaw(float f) {
 		this.yaw = f;
+	}
+
+	public void setPos(float x, float y, float z) {
+		this.pos = new Vector3f(x, y, z);
+		this.rebuildView();
 	}
 }
