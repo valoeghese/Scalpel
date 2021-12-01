@@ -29,7 +29,6 @@ public class BufferBuilder {
 			// copy contents
 			this.buffer.position(0);
 			next.put(this.buffer);
-			next.rewind();
 			next.position(originalPos);
 
 			// set

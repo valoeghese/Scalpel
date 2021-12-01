@@ -27,7 +27,7 @@ public class TestRenderModel extends ScalpelApp {
 		this.window = new Window("TestRenderPlaneModel", 300, 300);
 		GLUtils.initGL(this.window);
 		this.shader = new Shader("assets/shader/gui_v.glsl", "assets/shader/gui_f.glsl");
-		this.model = new PlaneModel(this.shader);
+		this.model = new PlaneModel();
 	}
 
 	@Override

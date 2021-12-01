@@ -68,7 +68,13 @@ public abstract class Model {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, this.mode);
 
-		LEGACY_FORMAT.applyFormat();
+		glVertexAttribPointer(0, 3, GL_FLOAT, false,4 * 6, 4 * 0);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(1, 2, GL_FLOAT, false, 4 * 6, 4 * 3);
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(2, 1, GL_FLOAT, false, 4 * 6, 4 * 5);
+		glEnableVertexAttribArray(2);
+
 		glBindVertexArray(0);
 
 		this.vertexArrays.add(new VertexArray(vbo, ebo, vao, indices.length));
@@ -135,11 +141,6 @@ public abstract class Model {
 		glBindVertexArray(0);
 	}
 
-	private static final VertexFormat LEGACY_FORMAT = new VertexFormat.Builder()
-			.add(GL_FLOAT, 3)
-			.add(GL_FLOAT, 2)
-			.add(GL_FLOAT, 1)
-			.build();
 	/**
 	 * A container containing
 	 */

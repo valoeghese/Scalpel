@@ -13,8 +13,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class PlaneModel extends Model {
-	public PlaneModel(Shader shader) {
-		super(GL30.GL_STATIC_DRAW, shader);
+	public PlaneModel() {
+		super(GL30.GL_STATIC_DRAW);
 
 		this.setVertexFormat(POS_UV);
 
