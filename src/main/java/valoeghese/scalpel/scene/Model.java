@@ -47,7 +47,7 @@ public abstract class Model {
 		this.iTemp.add(i2);
 	}
 
-	protected void generateBuffers(ByteBuffer vertices) {
+	protected void genVertexArrays(ByteBuffer vertices) {
 		if (this.vertexFormat == null) throw new IllegalStateException("Must specify a vertex format!");
 
 		int[] indices = this.iTemp.toIntArray();
@@ -65,13 +65,7 @@ public abstract class Model {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, this.mode);
 
-		//this.vertexFormat.applyFormat();
-		glVertexAttribPointer(0, 3, GL_FLOAT, false, 4 * 5, 4 * 0);
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(1, 2, GL_FLOAT, false, 4 * 5, 4 * 3);
-		glEnableVertexAttribArray(1);
-		glBindVertexArray(0);
-
+		this.vertexFormat.applyFormat();
 		this.vertexArrays.add(new VertexArray(vbo, ebo, vao, indices.length));
 	}
 
@@ -133,12 +127,6 @@ public abstract class Model {
 	public static final void unbind() {
 		glBindVertexArray(0);
 	}
-
-	private static final VertexFormat LEGACY_FORMAT = new VertexFormat.Builder()
-			.add(GL_FLOAT, 3)
-			.add(GL_FLOAT, 2)
-			.add(GL_FLOAT, 1)
-			.build();
 
 	/**
 	 * A container containing the vertex buffer object, element (index) buffer object, and vertex array object.

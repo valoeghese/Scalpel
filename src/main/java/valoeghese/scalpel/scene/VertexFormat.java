@@ -9,6 +9,7 @@ public class VertexFormat {
 	private VertexFormat(VertexFormat.Builder builder) {
 		this.format = builder.entries.toArray(Entry[]::new);
 		this.stride = builder.stride;
+		System.out.println(this.stride);
 	}
 
 	private final Entry[] format;
@@ -23,6 +24,7 @@ public class VertexFormat {
 
 	/**
 	 * Applies this vertex format to the current buffer object.
+	 * This is primarily used internally, however it has been left public for those who want to use more raw GL in generating their buffer objects. This may change in a future version of Scalpel.
 	 */
 	public void applyFormat() {
 		for (int index = 0; index < this.format.length; ++index) {
@@ -30,11 +32,6 @@ public class VertexFormat {
 			glVertexAttribPointer(index, attribute.size, attribute.type, attribute.normalised, this.stride, attribute.pointer);
 			glEnableVertexAttribArray(index);
 		}
-
-		glVertexAttribPointer(1, 2, GL_FLOAT, false, 4 * 6, 4 * 3);
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(2, 1, GL_FLOAT, false, 4 * 6, 4 * 5);
-		glEnableVertexAttribArray(2);
 	}
 
 	private static int nBytes(int type) throws IllegalArgumentException {
