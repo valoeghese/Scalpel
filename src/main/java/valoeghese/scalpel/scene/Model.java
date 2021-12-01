@@ -11,26 +11,19 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.lwjgl.opengl.GL11.GL_FLOAT;
-import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
-import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
-import static org.lwjgl.opengl.GL11.glDrawElements;
-import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL15.glDeleteBuffers;
 import static org.lwjgl.opengl.GL30.*;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
 
+/**
+ * An OpenGL model which can be comprised of one or more Vertex Array Objects.
+ */
 public abstract class Model {
-	protected Model(int mode, @Nullable Shader shader) {
+	protected Model(int mode) {
 		this.mode = mode;
-		this.shader = shader;
 	}
 
 	private IntList iTemp = new IntArrayList();
 	private List<VertexArray> vertexArrays = new ArrayList<>();
 	private final int mode;
-	@Nullable
-	private final Shader shader;
 	private VertexFormat vertexFormat;
 
 	protected void setVertexFormat(VertexFormat format) {
@@ -79,11 +72,7 @@ public abstract class Model {
 		this.vertexArrays = new ArrayList<>();
 	}
 
-	public final void render(Matrix4f transform) {
-		if (this.shader != null) {
-			this.shader.uniformMat4f("transform", transform);
-		}
-
+	public final void render() throws NullPointerException {
 		for (VertexArray array : this.vertexArrays) {
 			glBindVertexArray(array.vao);
 			glDrawElements(GL_TRIANGLES, array.elementCount, GL_UNSIGNED_INT, GLUtils.NULL);
@@ -117,11 +106,6 @@ public abstract class Model {
 		glDeleteVertexArrays(array.vao);
 		glDeleteBuffers(array.ebo);
 		glDeleteBuffers(array.vbo);
-	}
-
-	@Nullable
-	public Shader getShader() {
-		return this.shader;
 	}
 
 	public static final void unbind() {

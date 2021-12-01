@@ -17,7 +17,6 @@ public class TestRenderModel extends ScalpelApp {
 	}
 
 	private Model model;
-	private final Matrix4f transform = new Matrix4f();
 	private Window window;
 	private Shader shader;
 	private final Matrix4f projection = new Matrix4f().ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f);
@@ -57,7 +56,7 @@ public class TestRenderModel extends ScalpelApp {
 		this.shader.bind();
 		this.shader.uniformMat4f("projection", this.projection);
 		glBindTexture(GL_TEXTURE_2D, PlaneModel.TEXTURE_TO_USE);
-		this.model.render(this.transform);
+		this.model.render();
 		glBindTexture(GL_TEXTURE_2D, 0);
 		Shader.unbind();
 	}
