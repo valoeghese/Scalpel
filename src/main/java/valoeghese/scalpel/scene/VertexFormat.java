@@ -10,7 +10,6 @@ public class VertexFormat {
 	private VertexFormat(VertexFormat.Builder builder) {
 		this.format = builder.entries.toArray(Entry[]::new);
 		this.stride = builder.stride;
-		System.out.println(this.stride);
 	}
 
 	private final Entry[] format;
