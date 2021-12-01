@@ -5,6 +5,7 @@ layout (location = 1) in vec2 rawUV;
 out vec2 uvPass;
 
 uniform mat4 projection;
+uniform mat4 transform;
 
 void main() {
     gl_Position = projection * vec4(rawPos, 1.0);

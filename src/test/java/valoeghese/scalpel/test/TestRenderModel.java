@@ -8,6 +8,9 @@ import valoeghese.scalpel.Window;
 import valoeghese.scalpel.scene.Model;
 import valoeghese.scalpel.util.GLUtils;
 
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.glBindTexture;
+
 public class TestRenderModel extends ScalpelApp {
 	private TestRenderModel() {
 		super(100 / 20);
@@ -53,7 +56,9 @@ public class TestRenderModel extends ScalpelApp {
 	protected void render(float tickDelta) {
 		this.shader.bind();
 		this.shader.uniformMat4f("projection", this.projection);
+		glBindTexture(GL_TEXTURE_2D, PlaneModel.TEXTURE_TO_USE);
 		this.model.render(this.transform);
+		glBindTexture(GL_TEXTURE_2D, 0);
 		Shader.unbind();
 	}
 

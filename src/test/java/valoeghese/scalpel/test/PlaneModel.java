@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class PlaneModel extends Model {
 	public PlaneModel(Shader shader) {
-		super(TEXTURE_TO_USE, shader);
+		super(GL30.GL_STATIC_DRAW, shader);
 
 		this.setVertexFormat(POS_UV);
 
