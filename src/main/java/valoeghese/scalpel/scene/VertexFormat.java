@@ -36,9 +36,27 @@ public class VertexFormat {
 	 */
 	void applyFormat() {
 		for (int index = 0; index < this.format.length; ++index) {
-			Entry attribute = this.format[index];
-			glVertexAttribPointer(index, attribute.size, attribute.type, attribute.normalised, this.stride, attribute.pointer);
+			this.format[index].vertexAttribPointer(index, this.stride);
 			glEnableVertexAttribArray(index);
+		}
+	}
+
+	private static Entry createEntry(int type, int size, int pointer, boolean normalised) {
+		switch (type) {
+		case GL_BYTE:
+		case GL_UNSIGNED_BYTE:
+		case GL_SHORT:
+		case GL_UNSIGNED_SHORT:
+		case GL_INT:
+		case GL_UNSIGNED_INT:
+			return new IEntry(type, size, pointer, normalised);
+		case GL_HALF_FLOAT:
+		case GL_FLOAT:
+		case GL_DOUBLE: // in OpenGL 4 this will be an LEntry, and use glVertexAttribLPointer
+			return new Entry(type, size, pointer, normalised);
+		case 0x140C:
+			throw new IllegalArgumentException("OpenGL 4.1 (which adds GL_FIXED) is not currently supported, however, feel free to open a PR to support the latest GL features.");
+		default: throw new IllegalArgumentException("Unknown GL Type " + type + ". If you believe this is an error with Scalpel, please check if it has been fixed in a newer version, and if not, open an issue!");
 		}
 	}
 
@@ -83,13 +101,24 @@ public class VertexFormat {
 		 * @return this vertex format object.
 		 */
 		public VertexFormat.Builder add(int type, int size, boolean normalised) {
-			this.entries.add(new Entry(type, size, this.stride, normalised)); // the current stride is the offset for the pointer.
+			this.entries.add(createEntry(type, size, this.stride, normalised)); // the current stride is the offset for the pointer.
 			this.stride += nBytes(type) * size;
 			return this;
 		}
 
 		public VertexFormat build() {
 			return new VertexFormat(this);
+		}
+	}
+
+	private static class IEntry extends Entry {
+		IEntry(int type, int size, int pointer, boolean normalised) {
+			super(type, size, pointer, normalised);
+		}
+
+		@Override
+		void vertexAttribPointer(int index, int stride) {
+			glVertexAttribIPointer(index, this.size, this.type, stride, this.pointer);
 		}
 	}
 
@@ -101,10 +130,10 @@ public class VertexFormat {
 			this.normalised = normalised;
 		}
 
-		private final int type;
-		private final int size;
-		private final int pointer;
-		private final boolean normalised;
+		final int type;
+		final int size;
+		final int pointer;
+		final boolean normalised;
 
 		/**
 		 * @return the OpenGL type of this entry. For example, {@code GL_FLOAT}.
@@ -132,6 +161,10 @@ public class VertexFormat {
 		 */
 		public boolean isNormalised() {
 			return this.normalised;
+		}
+
+		void vertexAttribPointer(int index, int stride) {
+			glVertexAttribPointer(index, this.size, this.type, this.normalised, stride, this.pointer);
 		}
 	}
 }
